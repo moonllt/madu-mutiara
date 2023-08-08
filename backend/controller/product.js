@@ -40,6 +40,51 @@ router.post(
   })
 );
 
+
+// // create product
+// router.post(
+//   "/create-product",
+//   upload.array("images"),
+//   catchAsyncErrors(async (req, res, next) => {
+//     try {
+//       const shopId = req.body.shopId;
+//       const shop = await Shop.findById(shopId);
+//       if (!shop) {
+//         return next(new ErrorHandler("Shop Id is invalid!", 400));
+//       } else {
+//         const files = req.files;
+//         const imageUrls = files.map((file) => `${file.filename}`);
+
+//         const { name, description, category, tags, price, size, stock} = req.body;
+
+//         const productData = {
+//           name,
+//           description,
+//           category,
+//           tags,
+//           price,
+//           size,
+//           stock,
+//           // options: JSON.parse(options), // Mengonversi pilihan berat dan harga menjadi objek JSON
+//           images: imageUrls,
+//           shopId,
+//           shop,
+//         };
+
+//         const product = await Product.create(productData);
+
+//         res.status(201).json({
+//           success: true,
+//           product,
+//         });
+//       }
+//     } catch (error) {
+//       return next(new ErrorHandler(error, 400));
+//     }
+//   })
+// );
+
+
 // get all products of a shop
 router.get(
   "/get-all-products-shop/:id",
@@ -187,4 +232,84 @@ router.get(
     }
   })
 );
+
+
+// Update product by ID
+router.put(
+  "/update-product/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const productId = req.params.id;
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        return next(new ErrorHandler("Product not found", 404));
+      }
+
+      const productData = req.body;
+
+      // Hapus properti images dari productData
+      delete productData.images;
+
+      Object.assign(product, productData);
+
+      await product.save();
+
+      res.status(200).json({
+        success: true,
+        product,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+
+
+// get product by id
+// Get a product by ID
+router.get(
+  "/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const product = await Product.findById(req.params.id);
+
+      if (!product) {
+        return next(new ErrorHandler("Produk tidak ditemukan", 404));
+      }
+
+      res.status(200).json({
+        success: true,
+        product,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+
+
+// // all products --- for admin
+// router.get(
+//   "/admin-all-products",
+//   isAuthenticated,
+//   isAdmin("Admin"),
+//   catchAsyncErrors(async (req, res, next) => {
+//     try {
+//       const products = await Product.find().sort({
+//         createdAt: -1,
+//       });
+//       res.status(201).json({
+//         success: true,
+//         products,
+//       });
+//     } catch (error) {
+//       return next(new ErrorHandler(error.message, 500));
+//     }
+//   })
+// );
+
+
 module.exports = router;

@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { RxCross1 } from "react-icons/rx";
 import { IoBagHandleOutline } from "react-icons/io5";
-import { HiOutlineMinus, HiPlus } from "react-icons/hi";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
 import { backend_url } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
 import { addTocart, removeFromCart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
+import { FiX, FiPlus, FiMinus, FiXCircle } from "react-icons/fi";
 
 const Cart = ({ setOpenCart }) => {
   const { cart } = useSelector((state) => state.cart);
@@ -18,72 +17,62 @@ const Cart = ({ setOpenCart }) => {
   };
 
   const totalPrice = cart.reduce(
-    (acc, item) => acc + item.qty * item.discountPrice,
+    (acc, item) => acc + item.qty * item.price,
     0
   );
 
   const quantityChangeHandler = (data) => {
     dispatch(addTocart(data));
   };
+  
 
   return (
-    <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
-      <div className="fixed top-0 right-0 h-full w-[80%] 800px:w-[25%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm">
-        {cart && cart.length === 0 ? (
-          <div className="w-full h-screen flex items-center justify-center">
-            <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
-               <RxCross1 
-                size={25}
-                className="cursor-pointer"
-                onClick={() => setOpenCart(false)}
-                />
+    <div className="fixed top-0 left-0 w-full h-screen bg-[#0000004b] z-10 flex items-center justify-center">
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 bg-gray-100 border-b">
+          <h3 className="text-lg font-semibold">Cart</h3>
+          <FiX
+            size={20}
+            className="cursor-pointer text-gray-500 hover:text-gray-700 transition-colors"
+            onClick={() => setOpenCart(false)}
+          />
+        </div>
+        <div className="px-4 py-2">
+          {cart && cart.length === 0 ? (
+            <div className="flex items-center justify-center h-40">
+              <h5 className="text-center">Cart is empty!</h5>
             </div>
-            <h5>Cart Items is empty!</h5>
-          </div>
-        ) : (
-          <>
+          ) : (
             <div>
-              <div className="flex w-full justify-end pt-5 pr-5">
-                <RxCross1
-                  size={25}
-                  className="cursor-pointer"
-                  onClick={() => setOpenCart(false)}
-                />
+              <div className="flex items-center px-4 py-2">
+                <IoBagHandleOutline size={25} className="mr-2" />
+                <h5 className="text-lg font-semibold">
+                  {cart && cart.length} items
+                </h5>
               </div>
-              {/* Item length */}
-              <div className={`${styles.noramlFlex} p-4`}>
-                <IoBagHandleOutline size={25} />
-                <h5 className="pl-2 text-[20px] font-[500]">{cart && cart.length} items</h5>
-              </div>
-
-              {/* cart Single Items */}
-              <br />
-              <div className="w-full border-t">
+              <div className="border-t">
                 {cart &&
-                  cart.map((i, index) => (
+                  cart.map((item, index) => (
                     <CartSingle
                       key={index}
-                      data={i}
+                      data={item}
                       quantityChangeHandler={quantityChangeHandler}
                       removeFromCartHandler={removeFromCartHandler}
                     />
                   ))}
               </div>
             </div>
-
-            <div className="px-5 mb-3">
-              {/* checkout buttons */}
-              <Link to="/checkout">
-                <div
-                  className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
-                >
-                  <h1 className="text-[#fff] text-[18px] font-[600]">
-                    Checkout Now (USD${totalPrice})
-                  </h1>
-                </div>
-              </Link>
-            </div>
-          </>
+          )}
+        </div>
+        {cart.length > 0 && (
+          <div className="px-5 mb-3">
+            {/* checkout button */}
+            <Link to="/checkout">
+              <button className="w-full py-3 bg-black text-white font-semibold rounded-md hover:bg-gray-600 transition-colors">
+                Checkout ({totalPrice.toLocaleString("id-ID", { style: "currency", currency: "IDR" })})
+              </button>
+            </Link>
+          </div>
         )}
       </div>
     </div>
@@ -92,7 +81,7 @@ const Cart = ({ setOpenCart }) => {
 
 const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
   const [value, setValue] = useState(data.qty);
-  const totalPrice = data.discountPrice * value;
+  const totalPrice = data.price * value;
 
   const increment = (data) => {
     if (data.stock < value) {
@@ -110,45 +99,48 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
     quantityChangeHandler(updateCartData);
   };
 
+  const formattedPrice = data && data.price ? data.price.toLocaleString("id-ID", { style: "currency", currency: "IDR" }) : "";
+
   return (
     <div className="border-b p-4">
-      <div className="w-full flex items-center">
-        <div>
-          <div
-            className={`bg-[#e44343] border border-[#e4434373] rounded-full w-[25px] h-[25px] ${styles.noramlFlex} justify-center cursor-pointer`}
-            onClick={() => increment(data)}
-          >
-            <HiPlus size={18} color="#fff" />
-          </div>
-          <span className="pl-[10px]">{data.qty}</span>
-          <div
-            className="bg-[#a7abb14f] rounded-full w-[25px] h-[25px] flex items-center justify-center cursor-pointer"
-            onClick={() => decrement(data)}
-          >
-            <HiOutlineMinus size={16} color="#7d879c" />
-          </div>
-        </div>
+      <div className="flex items-center">
+        <FiXCircle
+          className="cursor-pointer text-red-500 hover:text-red-700 transition-colors"
+          onClick={() => removeFromCartHandler(data)}
+        />
         <img
           src={`${backend_url}${data?.images[0]}`}
           alt=""
-          className="w-[130px] h-min ml-2 mr-2 rounded-[5px]"
+          className="w-[130px] h-min rounded-[5px] ml-2 mr-2"
         />
-        <div className="pl-[5px]">
-          <h1>{data.name}</h1>
-          <h4 className="font-[400] text-[15px] text-[#00000082]">
-            ${data.discountPrice} * {value}
-          </h4>
-          <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
-            US${totalPrice}
+        <div className="ml-4 flex flex-col">
+          <h1 className="text-md font-semibold">{data.name}</h1>
+          <h4 className="text-gray-500 mt-2">
+            {formattedPrice} x {value}
           </h4>
         </div>
-        <RxCross1
-          className="cursor-pointer"
-          onClick={() => removeFromCartHandler(data)}
-        />
+        <div className="ml-auto">
+          <div className="flex items-center">
+            <FiMinus
+              size={20}
+              className="cursor-pointer text-gray-500 hover:text-gray-700 transition-colors"
+              onClick={() => decrement(data)}
+            />
+            <span className="px-2">{value}</span>
+            <FiPlus
+              size={20}
+              className="cursor-pointer text-gray-500 hover:text-gray-700 transition-colors"
+              onClick={() => increment(data)}
+            />
+            
+            
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
+
 
 export default Cart;

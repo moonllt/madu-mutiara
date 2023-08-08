@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
+    orderId: {
+    type: String,
+    default: function() {
+      return "ORDER-" + Math.floor(Math.random() * 1000000);
+    },
+        unique: true,
+    },
     cart:{
         type: Array,
         required: true,
@@ -22,7 +29,7 @@ const orderSchema = new mongoose.Schema({
         default: "Processing",
     },
     paymentInfo:{
-        id:{
+        id:{ 
             type: String,
         },
         status: {
@@ -36,6 +43,10 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    resi: {
+        type: String,
+        default: ""
+    },
     deliveredAt: {
         type: Date,
     },
@@ -43,6 +54,7 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+   
 });
 
 module.exports = mongoose.model("Order", orderSchema);

@@ -51,7 +51,7 @@ const AllOrders = () => {
       field: " ",
       flex: 1,
       minWidth: 150,
-      headerName: "",
+      headerName: "Rincian",
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -72,10 +72,14 @@ const AllOrders = () => {
 
   orders &&
     orders.forEach((item) => {
+      const formattedTotal = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+        currency: "IDR",
+      }).format(item.totalPrice);
       row.push({
         id: item._id,
-        itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        itemsQty: item?.cart?.reduce((acc, item) => acc + item.qty, 0),
+        total: formattedTotal,
         status: item.status,
       });
     });
@@ -85,11 +89,11 @@ const AllOrders = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="w-full mx-8 pt-1 mt-10 bg-white">
+        <div className="w-full min-h-[45vh] bg-white rounded">
           <DataGrid
             rows={row}
             columns={columns}
-            pageSize={10}
+            pageSize={4}
             disableSelectionOnClick
             autoHeight
           />

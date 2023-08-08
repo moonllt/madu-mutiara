@@ -53,7 +53,7 @@ const AllRefundOrders = () => {
       field: " ",
       flex: 1,
       minWidth: 150,
-      headerName: "",
+      headerName: "Rincian",
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -73,11 +73,15 @@ const AllRefundOrders = () => {
   const row = [];
 
   refundOrders &&
-  refundOrders.forEach((item) => {
+    refundOrders.forEach((item) => {
+     const formattedTotal = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(item.totalPrice);
       row.push({
         id: item._id,
-        itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        itemsQty: item?.cart?.reduce((acc, item) => acc + item.qty, 0),
+        total: formattedTotal,
         status: item.status,
       });
     });

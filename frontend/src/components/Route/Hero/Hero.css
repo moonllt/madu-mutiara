@@ -1,0 +1,28 @@
+.hero-container {
+    position: relative;
+}
+
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    color: white;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar li {
+    margin-right: 10px;
+}
+
+.navbar a {
+    color: rgb(33, 33, 33);
+    text-decoration: none;
+}

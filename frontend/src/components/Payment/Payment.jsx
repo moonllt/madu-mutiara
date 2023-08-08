@@ -164,7 +164,7 @@ const Payment = () => {
     };
 
     await axios
-    .post(`${server}/order/create-order`, order, config)
+    .post(`${server}/order/er`, order, config)
     .then((res) => {
       setOpen(false);
       navigate("/order/success");

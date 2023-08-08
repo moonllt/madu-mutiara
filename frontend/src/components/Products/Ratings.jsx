@@ -28,9 +28,9 @@ const Ratings = ({ rating }) => {
       stars.push(
         <AiOutlineStar
           key={i}
-          size={20}
-          color="#f6ba00"
-          className="mr-2 cursor-pointer"
+          size={25}
+          color="#d17d1d"
+          className="mr-0,5 cursor-pointer"
         />
       );
     }

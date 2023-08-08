@@ -9,48 +9,36 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
-const { isAuthenticated, isAdmin } = require("../middleware/auth");
+const { isAuthenticated, isAdmin, isSeller } = require("../middleware/auth");
 
-router.post("/create-user", upload.single("file"), async (req, res, next) => {
+router.post("/create-user", async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-          res.status(500).json({ message: "Error deleting file" });
-        }
-      });
       return next(new ErrorHandler("User already exists", 400));
     }
-
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
 
     const user = {
       name: name,
       email: email,
       password: password,
-      avatar: fileUrl,
     };
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `https://eshop-tutorial-cefl.vercel.app/activation/${activationToken}`;
+    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
 
     try {
       await sendMail({
         email: user.email,
-        subject: "Activate your account",
-        message: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`,
+        subject: "Aktivasi akunmu!",
+        message: `Halo ${user.name}, klik untuk aktivasi akunmu: ${activationUrl}`,
       });
       res.status(201).json({
         success: true,
-        message: `please check your email:- ${user.email} to activate your account!`,
+        message: `Cek email:- ${user.email} untuk aktivasi akunmu!`,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -87,7 +75,7 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return next(new ErrorHandler("User already exists", 400));
+        return next(new ErrorHandler("Sudah pernah membuat akun!", 400));
       }
       user = await User.create({
         name,
@@ -111,20 +99,20 @@ router.post(
       const { email, password } = req.body;
 
       if (!email || !password) {
-        return next(new ErrorHandler("Please provide the all fields!", 400));
+        return next(new ErrorHandler("Maaf, login gagal. Mohon pastikan Anda telah mengisi email dan password dengan benar.", 400));
       }
 
       const user = await User.findOne({ email }).select("+password");
 
       if (!user) {
-        return next(new ErrorHandler("User doesn't exists!", 400));
+        return next(new ErrorHandler("Maaf, login gagal. Mohon pastikan Anda telah mengisi email dengan benar.", 400));
       }
 
       const isPasswordValid = await user.comparePassword(password);
 
       if (!isPasswordValid) {
         return next(
-          new ErrorHandler("Please provide the correct information", 400)
+          new ErrorHandler("Maaf, login gagal. Mohon pastikan Anda telah mengisi password dengan benar.", 400)
         );
       }
 
@@ -144,7 +132,7 @@ router.get(
       const user = await User.findById(req.user.id);
 
       if (!user) {
-        return next(new ErrorHandler("User doesn't exists", 400));
+        return next(new ErrorHandler("Akun tidak ditemukan", 400));
       }
 
       res.status(200).json({
@@ -168,7 +156,7 @@ router.get(
       });
       res.status(201).json({
         success: true,
-        message: "Log out successful!",
+        message: " Berhasil keluar dari akun Anda!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -187,14 +175,14 @@ router.put(
       const user = await User.findOne({ email }).select("+password");
 
       if (!user) {
-        return next(new ErrorHandler("User not found", 400));
+        return next(new ErrorHandler("Pastikan email yang kamu masukkan benar!", 400));
       }
 
       const isPasswordValid = await user.comparePassword(password);
 
       if (!isPasswordValid) {
         return next(
-          new ErrorHandler("Please provide the correct information", 400)
+          new ErrorHandler("Pastikan password yang kamu masukkan benar!", 400)
         );
       }
 
@@ -256,7 +244,7 @@ router.put(
       );
       if (sameTypeAddress) {
         return next(
-          new ErrorHandler(`${req.body.addressType} address already exists`)
+          new ErrorHandler(`${req.body.addressType} Alamat anda masih sama!`)
         );
       }
 
@@ -323,12 +311,12 @@ router.put(
       );
 
       if (!isPasswordMatched) {
-        return next(new ErrorHandler("Old password is incorrect!", 400));
+        return next(new ErrorHandler("Password lama!", 400));
       }
 
       if (req.body.newPassword !== req.body.confirmPassword) {
         return next(
-          new ErrorHandler("Password doesn't matched with each other!", 400)
+          new ErrorHandler("Password tidak cocok!", 400)
         );
       }
       user.password = req.body.newPassword;
@@ -337,7 +325,7 @@ router.put(
 
       res.status(200).json({
         success: true,
-        message: "Password updated successfully!",
+        message: "Password berhasil diupdate!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -365,8 +353,9 @@ router.get(
 // all users --- for admin
 router.get(
   "/admin-all-users",
+  isSeller,
   isAuthenticated,
-  isAdmin("Admin"),
+  // isAdmin("Admin"),
   catchAsyncErrors(async (req, res, next) => {
     try {
       const users = await User.find().sort({
@@ -385,15 +374,16 @@ router.get(
 // delete users --- admin
 router.delete(
   "/delete-user/:id",
+  isSeller,
   isAuthenticated,
-  isAdmin("Admin"),
+  // isAdmin("Admin"),
   catchAsyncErrors(async (req, res, next) => {
     try {
       const user = await User.findById(req.params.id);
 
       if (!user) {
         return next(
-          new ErrorHandler("User is not available with this id", 400)
+          new ErrorHandler("User tidak ditemukan. Id yang anda masukan salah!", 400)
         );
       }
 
@@ -401,7 +391,7 @@ router.delete(
 
       res.status(201).json({
         success: true,
-        message: "User deleted successfully!",
+        message: "Berhasil terhapus!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

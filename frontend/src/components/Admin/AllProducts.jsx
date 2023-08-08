@@ -73,11 +73,15 @@ const AllProducts = () => {
   const row = [];
 
   data &&
-  data.forEach((item) => {
+    data.forEach((item) => {
+    const formattedPrice = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(item.discountPrice);
       row.push({
         id: item._id,
         name: item.name,
-        price: "US$ " + item.discountPrice,
+        price: formattedPrice,
         Stock: item.stock,
         sold: item?.sold_out,
       });

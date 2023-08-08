@@ -3,6 +3,8 @@ import Footer from "../components/Layout/Footer";
 import Header from "../components/Layout/Header";
 import Lottie from "react-lottie";
 import animationData from "../Assests/animations/107043-success.json";
+import { Link } from 'react-router-dom';
+
 
 const OrderSuccessPage = () => {
   return (
@@ -26,9 +28,26 @@ const Success = () => {
   return (
     <div>
       <Lottie options={defaultOptions} width={300} height={300} />
-      <h5 className="text-center mb-14 text-[25px] text-[#000000a1]">
-        Your order is successful 😍
-      </h5>
+      <h3 className="text-center mb-14 text-[30px] text-[#000000a1]">
+  Pembayaran berhasil! pesanan anda sedang diproses
+  <br />
+  <Link
+  to="/profile"
+  style={{
+    color: '#CF9443',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+    transition: 'color 0.2s ease-in-out',
+  }}
+  onMouseEnter={(e) => e.target.style.color = '#FFD700'}
+  onMouseLeave={(e) => e.target.style.color = '#CF9443'}
+>
+  Lihat Pesanan
+</Link>
+
+
+</h3>
+
       <br />
       <br />
     </div>

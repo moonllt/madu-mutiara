@@ -78,33 +78,33 @@ const ProfileContent = ({ active }) => {
       {/* profile */}
       {active === 1 && (
         <>
-          <div className="flex justify-center w-full">
-            <div className="relative">
-              <img
+          {/* <div className="flex justify-center w-full">
+            <div className="relative"> */}
+              {/* <img
                 src={`${backend_url}${user?.avatar}`}
                 className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
                 alt=""
-              />
-              <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
-                <input
+              /> */}
+              {/* <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]"> */}
+                {/* <input
                   type="file"
                   id="image"
                   className="hidden"
                   onChange={handleImage}
-                />
-                <label htmlFor="image">
+                /> */}
+                {/* <label htmlFor="image">
                   <AiOutlineCamera />
-                </label>
-              </div>
-            </div>
-          </div>
+                </label> */}
+              {/* </div>
+            </div> */}
+          {/* </div> */}
           <br />
           <br />
           <div className="w-full px-5">
             <form onSubmit={handleSubmit} aria-required={true}>
               <div className="w-full 800px:flex block pb-3">
                 <div className=" w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">Full Name</label>
+                  <label className="block pb-2">Nama</label>
                   <input
                     type="text"
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -114,7 +114,7 @@ const ProfileContent = ({ active }) => {
                   />
                 </div>
                 <div className=" w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">Email Address</label>
+                  <label className="block pb-2">Email </label>
                   <input
                     type="text"
                     className={`${styles.input} !w-[95%] mb-1 800px:mb-0`}
@@ -127,7 +127,7 @@ const ProfileContent = ({ active }) => {
 
               <div className="w-full 800px:flex block pb-3">
                 <div className=" w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">Phone Number</label>
+                  <label className="block pb-2">Ponsel Aktif</label>
                   <input
                     type="number"
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -138,7 +138,7 @@ const ProfileContent = ({ active }) => {
                 </div>
 
                 <div className=" w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">Enter your password</label>
+                  <label className="block pb-2">Masukkan Password</label>
                   <input
                     type="password"
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -151,7 +151,7 @@ const ProfileContent = ({ active }) => {
               <input
                 className={`w-[250px] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
                 required
-                value="Update"
+                value="Update Profil"
                 type="submit"
               />
             </form>
@@ -240,7 +240,7 @@ const AllOrders = () => {
       field: " ",
       flex: 1,
       minWidth: 150,
-      headerName: "",
+      headerName: "Rincian",
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -261,10 +261,14 @@ const AllOrders = () => {
 
   orders &&
     orders.forEach((item) => {
+      const formattedTotal = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+        currency: "IDR",
+      }).format(item.totalPrice);
       row.push({
         id: item._id,
-        itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        itemsQty: item?.cart?.reduce((acc, item) => acc + item.qty, 0),
+        total: formattedTotal,
         status: item.status,
       });
     });
@@ -327,7 +331,7 @@ const AllRefundOrders = () => {
       field: " ",
       flex: 1,
       minWidth: 150,
-      headerName: "",
+      headerName: "Rincian",
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -347,11 +351,15 @@ const AllRefundOrders = () => {
   const row = [];
 
   eligibleOrders &&
-   eligibleOrders.forEach((item) => {
+    eligibleOrders.forEach((item) => {
+     const formattedTotal = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(item.totalPrice);
       row.push({
         id: item._id,
-        itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        itemsQty: item?.cart?.reduce((acc, item) => acc + item.qty, 0),
+        total: formattedTotal,
         status: item.status,
       });
     });
@@ -433,10 +441,14 @@ const TrackOrder = () => {
 
   orders &&
     orders.forEach((item) => {
+      const formattedTotal = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(item.totalPrice);
       row.push({
         id: item._id,
-        itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        itemsQty: item?.cart?.reduce((acc, item) => acc + item.qty, 0),
+        total: formattedTotal,
         status: item.status,
       });
     });
@@ -490,7 +502,7 @@ const ChangePassword = () => {
           className="flex flex-col items-center"
         >
           <div className=" w-[100%] 800px:w-[50%] mt-5">
-            <label className="block pb-2">Enter your old password</label>
+            <label className="block pb-2"> Masukkan Password Lama </label>
             <input
               type="password"
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -500,7 +512,7 @@ const ChangePassword = () => {
             />
           </div>
           <div className=" w-[100%] 800px:w-[50%] mt-2">
-            <label className="block pb-2">Enter your new password</label>
+            <label className="block pb-2">Masukkan Password Baru</label>
             <input
               type="password"
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -510,7 +522,7 @@ const ChangePassword = () => {
             />
           </div>
           <div className=" w-[100%] 800px:w-[50%] mt-2">
-            <label className="block pb-2">Enter your confirm password</label>
+            <label className="block pb-2">Konfirmasi Password Baru</label>
             <input
               type="password"
               className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -521,7 +533,7 @@ const ChangePassword = () => {
             <input
               className={`w-[95%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
               required
-              value="Update"
+              value="Simpan"
               type="submit"
             />
           </div>
@@ -533,7 +545,7 @@ const ChangePassword = () => {
 
 const Address = () => {
   const [open, setOpen] = useState(false);
-  const [country, setCountry] = useState("");
+ 
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState();
   const [address1, setAddress1] = useState("");
@@ -541,6 +553,44 @@ const Address = () => {
   const [addressType, setAddressType] = useState("");
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [provinces, setProvinces] = useState([]);
+  const [province, setProvince] = useState([]);
+  const [cities, setCities] = useState([]);
+    const [penerima, setPenerima] = useState("");
+  const [ponselAktif, setPonselAktif] = useState(null);
+
+  useEffect(() => {
+    fetchProvinces();
+  }, []);
+
+
+  const fetchProvinces = async () => {
+  try {
+    const response = await axios.get(`${server}/alamat/provinces`);
+    setProvinces(response.data);
+    // Setelah mendapatkan data provinsi, ambil data kota dengan ID provinsi yang dipilih (misalnya ID provinsi 1)
+    if (response.data.length > 0) {
+      fetchCities(response.data[0].province_id);
+    }
+  } catch (error) {
+    console.error(error);
+    }
+  };
+
+  const fetchCities = async provinceId => {
+    try {
+      const response = await axios.get(`${server}/alamat/cities/${provinceId}`);
+      setCities(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCityChange = (cityId) => {
+    setCity(cityId);  //Memperbarui state city dengan nilai cityId yang dipilih
+    
+  };
+  
 
   const addressTypeData = [
     {
@@ -555,30 +605,31 @@ const Address = () => {
   ];
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (addressType === "" || country === "" || city === "") {
-      toast.error("Please fill all the fields!");
-    } else {
-      dispatch(
-        updatUserAddress(
-          country,
-          city,
-          address1,
-          address2,
-          zipCode,
-          addressType
-        )
-      );
-      setOpen(false);
-      setCountry("");
-      setCity("");
-      setAddress1("");
-      setAddress2("");
-      setZipCode(null);
-      setAddressType("");
-    }
-  };
+  if (addressType === "" || province === "" || city === "") {
+    toast.error("Please fill all the fields!");
+  } else {
+    dispatch(
+      updatUserAddress(
+        province,
+        city,
+        address1,
+        address2,
+        zipCode,
+        addressType
+      )
+    );
+    setOpen(false);
+    setProvince("");
+    setCity("");
+    setAddress1("");
+    setAddress2("");
+    setZipCode(null);
+    setAddressType("");
+  }
+};
+
 
   const handleDelete = (item) => {
     const id = item._id;
@@ -588,142 +639,170 @@ const Address = () => {
   return (
     <div className="w-full px-5">
       {open && (
-        <div className="fixed w-full h-screen bg-[#0000004b] top-0 left-0 flex items-center justify-center ">
-          <div className="w-[35%] h-[80vh] bg-white rounded shadow relative overflow-y-scroll">
-            <div className="w-full flex justify-end p-3">
-              <RxCross1
-                size={30}
-                className="cursor-pointer"
-                onClick={() => setOpen(false)}
-              />
-            </div>
-            <h1 className="text-center text-[25px] font-Poppins">
-              Add New Address
-            </h1>
-            <div className="w-full">
-              <form aria-required onSubmit={handleSubmit} className="w-full">
-                <div className="w-full block p-4">
-                  <div className="w-full pb-2">
-                    <label className="block pb-2">Country</label>
-                    <select
-                      name=""
-                      id=""
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      className="w-[95%] border h-[40px] rounded-[5px]"
-                    >
-                      <option value="" className="block border pb-2">
-                        choose your country
-                      </option>
-                      {Country &&
-                        Country.getAllCountries().map((item) => (
-                          <option
-                            className="block pb-2"
-                            key={item.isoCode}
-                            value={item.isoCode}
-                          >
-                            {item.name}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-
-                  <div className="w-full pb-2">
-                    <label className="block pb-2">Choose your City</label>
-                    <select
-                      name=""
-                      id=""
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      className="w-[95%] border h-[40px] rounded-[5px]"
-                    >
-                      <option value="" className="block border pb-2">
-                        choose your city
-                      </option>
-                      {State &&
-                        State.getStatesOfCountry(country).map((item) => (
-                          <option
-                            className="block pb-2"
-                            key={item.isoCode}
-                            value={item.isoCode}
-                          >
-                            {item.name}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-
-                  <div className="w-full pb-2">
-                    <label className="block pb-2">Address 1</label>
-                    <input
-                      type="address"
-                      className={`${styles.input}`}
-                      required
-                      value={address1}
-                      onChange={(e) => setAddress1(e.target.value)}
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
+    <div className="w-[60%] h-[80vh] max-w-4xl bg-white rounded-lg shadow-lg overflow-y-auto">
+      <div className="flex justify-end p-4">
+        <RxCross1
+          size={30}
+          className="cursor-pointer"
+          onClick={() => setOpen(false)}
+        />
+      </div>
+      <h1 className="text-center text-2xl font-bold mb-6">
+        Tambah Alamat Baru
+      </h1>
+      <div className="p-6">
+        <form onSubmit={handleSubmit} className="w-full">
+          <div className="flex items-center pb-4">
+            <div className="w-1/2 pr-2">
+              <label htmlFor="province" className="block pb-2 font-semibold">
+                Provinsi
+              </label>
+              <div className="relative">
+                <select
+                  id="province"
+                  className="w-full border border-gray-300 rounded-md py-2 pl-3 pr-8 leading-tight focus:outline-none focus:ring focus:border-blue-300"
+                  onChange={(e) => fetchCities(e.target.value)}
+                >
+                  <option value="" disabled selected hidden>
+                    Pilih Provinsi
+                  </option>
+                  {provinces.map((province) => (
+                    <option key={province.province_id} value={province.province_id}>
+                      {province.province}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                  <svg
+                    className="w-4 h-4 text-gray-400"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      d="M7 7l3-3 3 3m0 6l-3 3-3-3"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
-                  </div>
-                  <div className="w-full pb-2">
-                    <label className="block pb-2">Address 2</label>
-                    <input
-                      type="address"
-                      className={`${styles.input}`}
-                      required
-                      value={address2}
-                      onChange={(e) => setAddress2(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="w-full pb-2">
-                    <label className="block pb-2">Zip Code</label>
-                    <input
-                      type="number"
-                      className={`${styles.input}`}
-                      required
-                      value={zipCode}
-                      onChange={(e) => setZipCode(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="w-full pb-2">
-                    <label className="block pb-2">Address Type</label>
-                    <select
-                      name=""
-                      id=""
-                      value={addressType}
-                      onChange={(e) => setAddressType(e.target.value)}
-                      className="w-[95%] border h-[40px] rounded-[5px]"
-                    >
-                      <option value="" className="block border pb-2">
-                        Choose your Address Type
-                      </option>
-                      {addressTypeData &&
-                        addressTypeData.map((item) => (
-                          <option
-                            className="block pb-2"
-                            key={item.name}
-                            value={item.name}
-                          >
-                            {item.name}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-
-                  <div className=" w-full pb-2">
-                    <input
-                      type="submit"
-                      className={`${styles.input} mt-5 cursor-pointer`}
-                      required
-                      readOnly
-                    />
-                  </div>
+                  </svg>
                 </div>
-              </form>
+              </div>
+            </div>
+            <div className="w-1/2 pl-2">
+              <label htmlFor="city" className="block pb-2 font-semibold">
+                Kota
+              </label>
+              <div className="relative">
+                <select
+                  id="city"
+                  className="w-full border border-gray-300 rounded-md py-2 pl-3 pr-8 leading-tight focus:outline-none focus:ring focus:border-blue-300"
+                  onChange={(e) => handleCityChange(e.target.value)}
+                >
+                  <option value="" disabled selected hidden>
+                    Pilih Kota
+                  </option>
+                  {cities.map((city) => (
+                    <option key={city.city_id} value={city.city_id}>
+                      {city.city_name}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                  <svg
+                    className="w-4 h-4 text-gray-400"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      d="M7 7l3-3 3 3m0 6l-3 3-3-3"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+
+          <div className="mb-4">
+            <label htmlFor="address1" className="block pb-2 font-semibold">
+              Alamat
+            </label>
+            <input
+              type="text"
+              id="address1"
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300"
+              required
+              value={address1}
+              onChange={(e) => setAddress1(e.target.value)}
+            />
+          </div>
+          {/* <div className="mb-4">
+            <label htmlFor="address2" className="block pb-2 font-semibold">
+              Address 2
+            </label>
+            <input
+              type="text"
+              id="address2"
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300"
+              required
+              value={address2}
+              onChange={(e) => setAddress2(e.target.value)}
+            />
+          </div> */}
+          <div className="mb-4">
+            <label htmlFor="zipCode" className="block pb-2 font-semibold">
+              Kode Pos
+            </label>
+            <input
+              type="number"
+              id="zipCode"
+              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300"
+              required
+              value={zipCode}
+              onChange={(e) => setZipCode(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="addressType" className="block pb-2 font-semibold">
+              Tipe Alamat
+            </label>
+            <select
+              id="addressType"
+              className="w-full border border-gray-300 rounded-md py-2 pl-3 pr-8 leading-tight focus:outline-none focus:ring focus:border-blue-300"
+              value={addressType}
+              onChange={(e) => setAddressType(e.target.value)}
+            >
+              <option value="" className="block border pb-2">
+                Pilih tipe alamat!
+              </option>
+              {addressTypeData &&
+                addressTypeData.map((item) => (
+                  <option className="block pb-2" key={item.name} value={item.name}>
+                    {item.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className="w-full pb-2">
+            <input
+              type="submit"
+              className="w-full bg-yellow-500 text-white font-semibold rounded-md py-2 cursor-pointer"
+              required
+              readOnly
+              value="Simpan"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
+
       <div className="flex w-full items-center justify-between">
         <h1 className="text-[25px] font-[600] text-[#000000ba] pb-2">
           My Addresses
@@ -732,7 +811,7 @@ const Address = () => {
           className={`${styles.button} !rounded-md`}
           onClick={() => setOpen(true)}
         >
-          <span className="text-[#fff]">Add New</span>
+          <span className="text-[#fff]">Tambah Alamat</span>
         </div>
       </div>
       <br />
@@ -767,7 +846,7 @@ const Address = () => {
 
       {user && user.addresses.length === 0 && (
         <h5 className="text-center pt-8 text-[18px]">
-          You not have any saved address!
+          Belum ada alamat yang tersimpan
         </h5>
       )}
     </div>

@@ -2,6 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoading: true,
+    stock: 0, // tambahkan properti stock
 };
 
 export const productReducer = createReducer(initialState, {
@@ -45,6 +46,19 @@ export const productReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
+  // UPDATE product of a shop
+  updateProductRequest: (state) => {
+    state.isLoading = true;
+  },
+  updateProductSuccess: (state, action) => {
+    state.isLoading = false;
+    state.message = action.payload;
+  },
+  updateProductFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
   // get all products
   getAllProductsRequest: (state) => {
     state.isLoading = true;
@@ -60,5 +74,17 @@ export const productReducer = createReducer(initialState, {
   
   clearErrors: (state) => {
     state.error = null;
+  },
+
+  // ADD this case to update the stock in the Redux store
+  UPDATE_PRODUCT_STOCK: (state, action) => {
+    const { productId, stock } = action.payload;
+    if (state.products) {
+      const productIndex = state.products.findIndex((product) => product._id === productId);
+      if (productIndex !== -1) {
+        state.products[productIndex].stock = stock;
+      }
+    }
+    state.stock = stock; // Update the stock in the state
   },
 });

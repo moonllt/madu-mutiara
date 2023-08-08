@@ -21,6 +21,8 @@ import {
   OrderDetailsPage,
   TrackOrderPage,
   UserInbox,
+  MidtransSandbox
+ 
 } from "./routes/Routes.js";
 import {
   ShopDashboardPage,
@@ -31,11 +33,13 @@ import {
   ShopAllCoupouns,
   ShopPreviewPage,
   ShopAllOrders,
+  ShopAllUser,
   ShopOrderDetails,
   ShopAllRefunds,
   ShopSettingsPage,
   ShopWithDrawMoneyPage,
   ShopInboxPage,
+  ShopUpdateProduct ,
 } from "./routes/ShopRoutes";
 import {
   AdminDashboardPage,
@@ -58,29 +62,22 @@ import { getAllProducts } from "./redux/actions/product";
 import { getAllEvents } from "./redux/actions/event";
 import axios from "axios";
 import { server } from "./server";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+// import { Elements } from "@stripe/react-stripe-js";
+
 
 const App = () => {
-  const [stripeApikey, setStripeApiKey] = useState("");
-
-  async function getStripeApikey() {
-    const { data } = await axios.get(`${server}/payment/stripeapikey`);
-    setStripeApiKey(data.stripeApikey);
-  }
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
     Store.dispatch(getAllEvents());
-    getStripeApikey();
   }, []);
 
   return (
     <BrowserRouter>
-      {stripeApikey && (
-        <Elements stripe={loadStripe(stripeApikey)}>
-          <Routes>
+      
+
+      <Routes>
             <Route
               path="/payment"
               element={
@@ -90,8 +87,7 @@ const App = () => {
               }
             />
           </Routes>
-        </Elements>
-      )}
+
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -117,6 +113,17 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/checkout-payment"
+          element={
+            <ProtectedRoute>
+              <MidtransSandbox />
+            </ProtectedRoute>
+          }
+        />
+        
+
         <Route path="/order/success" element={<OrderSuccessPage />} />
         <Route
           path="/profile"
@@ -134,6 +141,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/user/order/:id"
           element={
@@ -186,6 +194,26 @@ const App = () => {
             </SellerProtectedRoute>
           }
         />
+
+        <Route
+          path="/dashboard-get-user"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllUser />
+            </SellerProtectedRoute>
+          }
+        />
+
+        <Route
+          path="dashboard-products/product/update-product/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopUpdateProduct />
+            </SellerProtectedRoute>
+          }
+        />
+
+
         <Route
           path="/dashboard-orders"
           element={

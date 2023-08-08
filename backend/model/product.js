@@ -1,32 +1,47 @@
 const mongoose = require("mongoose");
 
+// const productOptionSchema = new mongoose.Schema({
+//   weight: {
+//     type: Number,
+//     required: [true, "Input berat!"],
+//   },
+//   price: {
+//     type: Number,
+//     required: [true, "Input harga!"],
+//   },
+//   stock: {
+//     type: Number,
+//     required: [true, "Input stok!"],
+//   },
+// });
+
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please enter your product name!"],
+    required: [true, "Mohon masukkan nama produk!"],
   },
   description: {
     type: String,
-    required: [true, "Please enter your product description!"],
+    required: [true, "Mohon berikan deskripsi produk!"],
   },
   category: {
     type: String,
-    required: [true, "Please enter your product category!"],
+    required: [true, "Mohon pilih kategori produk!"],
   },
   tags: {
     type: String,
   },
-  originalPrice: {
-    type: Number,
+  price: {
+    type: Number
   },
-  discountPrice: {
-    type: Number,
-    required: [true, "Please enter your product price!"],
+  size: {
+    type: Number
   },
   stock: {
     type: Number,
-    required: [true, "Please enter your product stock!"],
+    required: [true, "Input stok produk!"],
   },
+  // options: [productOptionSchema], // Menyimpan pilihan berat, harga, dan stok dalam array
   images: [
     {
       type: String,
@@ -68,6 +83,10 @@ const productSchema = new mongoose.Schema({
     default: 0,
   },
   createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  updatedAt: {
     type: Date,
     default: Date.now(),
   },

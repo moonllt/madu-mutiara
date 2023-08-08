@@ -2,7 +2,7 @@ import React from "react";
 import { FiShoppingBag } from "react-icons/fi";
 import {GrWorkshop} from "react-icons/gr";
 import { RxDashboard } from "react-icons/rx";
-import { CiMoneyBill, CiSettings } from "react-icons/ci";
+// import { CiMoneyBill, CiSettings } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { BsHandbag } from "react-icons/bs";
@@ -62,7 +62,7 @@ const AdminSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/admin-users" className="w-full flex items-center">
+        <Link to="" className="w-full flex items-center">
           <HiOutlineUserGroup
             size={30}
             color={`${active === 4 ? "crimson" : "#555"}`}
@@ -111,7 +111,7 @@ const AdminSideBar = ({ active }) => {
 
 
 
-      <div className="w-full flex items-center p-4">
+      {/* <div className="w-full flex items-center p-4">
         <Link
           to="/admin-withdraw-request"
           className="w-full flex items-center"
@@ -128,7 +128,7 @@ const AdminSideBar = ({ active }) => {
             Withdraw Request
           </h5>
         </Link>
-      </div>
+      </div> */}
 
       <div className="w-full flex items-center p-4">
         <Link

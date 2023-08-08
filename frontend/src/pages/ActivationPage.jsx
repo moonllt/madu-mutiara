@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { server } from "../server";
+import { Link } from "react-router-dom";
 
 const ActivationPage = () => {
   const { activation_token } = useParams();
@@ -37,9 +38,15 @@ const ActivationPage = () => {
       }}
     >
       {error ? (
-        <p>Your token is expired!</p>
+        <div className="center-content">
+          <p>Maaf, masa aktivasi kamu telah berakhir. Silahkan daftar kembali!</p>
+          <Link to="/sign-up" className="button-link">Ke halaman daftar</Link>
+        </div>
       ) : (
-        <p>Your account has been created suceessfully!</p>
+          <div className="center-content">
+            <p>Berhasil membuat akun! silahkan login untuk masuk ke akunmu</p>
+            <Link to="/login" className="button-link">Ke halaman login</Link>
+          </div>
       )}
     </div>
   );

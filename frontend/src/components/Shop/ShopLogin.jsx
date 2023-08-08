@@ -49,7 +49,7 @@ const ShopLogin = () => {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email address
+                Email 
               </label>
               <div className="mt-1">
                 <input
@@ -111,27 +111,27 @@ const ShopLogin = () => {
                 </label>
               </div>
               <div className="text-sm">
-                <a
+                {/* <a
                   href=".forgot-password"
                   className="font-medium text-blue-600 hover:text-blue-500"
                 >
                   Forgot your password?
-                </a>
+                </a> */}
               </div>
             </div>
             <div>
               <button
                 type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-gray-700"
               >
                 Submit
               </button>
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
-              <h4>Not have any account?</h4>
-              <Link to="/shop-create" className="text-blue-600 pl-2">
+              {/* <h4>Not have any account?</h4> */}
+              {/* <Link to="/shop-create" className="text-blue-600 pl-2">
                 Sign Up
-              </Link>
+              </Link> */}
             </div>
           </form>
         </div>

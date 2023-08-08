@@ -100,10 +100,12 @@ router.put(
       if (!order) {
         return next(new ErrorHandler("Order not found with this id", 400));
       }
+
+      // Check if the status is "Transferred to delivery partner"
       if (req.body.status === "Transferred to delivery partner") {
-        order.cart.forEach(async (o) => {
+        for (const o of order.cart) {
           await updateOrder(o._id, o.qty);
-        });
+        }
       }
 
       order.status = req.body.status;
@@ -111,8 +113,8 @@ router.put(
       if (req.body.status === "Delivered") {
         order.deliveredAt = Date.now();
         order.paymentInfo.status = "Succeeded";
-        const serviceCharge = order.totalPrice * .10;
-        await updateSellerInfo(order.totalPrice - serviceCharge);
+        await updateOrderForDelivered(order.cart); // Update the stock for delivered products
+        await updateSellerInfo(order.totalPrice);
       }
 
       await order.save({ validateBeforeSave: false });
@@ -131,10 +133,25 @@ router.put(
         await product.save({ validateBeforeSave: false });
       }
 
+      async function updateOrderForDelivered(cartItems) {
+        for (const item of cartItems) {
+          const product = await Product.findById(item._id);
+
+          // Adjust stock and sold_out values accordingly for delivered products
+          product.stock -= item.qty;
+          product.sold_out += item.qty;
+
+          await product.save({ validateBeforeSave: false });
+        }
+      }
+
       async function updateSellerInfo(amount) {
         const seller = await Shop.findById(req.seller.id);
-        
-        seller.availableBalance = amount;
+
+        const currentBalance = seller.availableBalance || 0;
+        const updatedBalance = currentBalance + amount;
+
+        seller.availableBalance = updatedBalance;
 
         await seller.save();
       }
@@ -144,31 +161,6 @@ router.put(
   })
 );
 
-// give a refund ----- user
-router.put(
-  "/order-refund/:id",
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      const order = await Order.findById(req.params.id);
-
-      if (!order) {
-        return next(new ErrorHandler("Order not found with this id", 400));
-      }
-
-      order.status = req.body.status;
-
-      await order.save({ validateBeforeSave: false });
-
-      res.status(200).json({
-        success: true,
-        order,
-        message: "Order Refund Request successfully!",
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
-  })
-);
 
 // accept the refund ---- seller
 router.put(
@@ -211,6 +203,8 @@ router.put(
   })
 );
 
+
+
 // all orders --- for admin
 router.get(
   "/admin-all-orders",
@@ -231,5 +225,48 @@ router.get(
     }
   })
 );
+
+// Create new endpoint to submit resi
+router.post("/submit-resi/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nomorResi } = req.body;
+
+    // Find the order by id
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Save the resi to the order
+    order.resi = nomorResi;
+    await order.save();
+
+    res.status(200).json({ message: "Resi successfully submitted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to submit resi" });
+  }
+});
+
+// Create new endpoint to get resi for buyer
+router.get("/get-resi/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the order by id
+    const order = await Order.findById(id);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Get the resi from the order and send it to the client
+    const resi = order.resi;
+    res.status(200).json({ resi });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch resi" });
+  }
+});
 
 module.exports = router;
