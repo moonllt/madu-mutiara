@@ -299,11 +299,11 @@ const MessageList = ({
       }
     >
       <div className="relative">
-        <img
+        {/* <img
           src={`${user?.avatar?.url}`}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
-        />
+        /> */}
         {online ? (
           <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute top-[2px] right-[2px]" />
         ) : (

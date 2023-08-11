@@ -198,7 +198,7 @@ const UserOrderDetails = () => {
               />
             </div>
             <h2 className="text-[20px] font-[500] font-Poppins text-center">
-              Ajukan Pengembalian
+              Rating & Ulasan
             </h2>
                 <br />
                 
@@ -271,10 +271,52 @@ const UserOrderDetails = () => {
               onClick={rating > 1 ? reviewHandler : null}
             >
               Kirim
-            </div>
+                </div>
+                
+
           </div>
         </div>
-      )}
+          )}
+
+          <div className="pl-3 text-[#00000084] border-t">
+                  <h5>
+    Sub Total:{" "}
+    <span style={{ color: "black", fontSize: "15px" }}>
+      {data?.subTotalPrice
+        ? new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          }).format(data.subTotalPrice)
+        : "-"}
+    </span>
+  </h5>
+
+  <h5>
+    Pengiriman:{" "}
+    <span style={{ color: "black", fontSize: "15px" }}>
+      {data?.shipping
+        ? new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          }).format(data.shipping)
+        : "-"}
+    </span>
+  </h5>
+
+  <h5>
+    Kode Promo: -{""}
+    <span style={{ color: "black", fontSize: "15px" }}>
+      {data?.discountPrice
+        ? new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          }).format(data.discountPrice)
+        : "-"}
+    </span>
+  </h5>
+</div>
+          
+          
 
           <div className="border-t w-full text-right">
             <h5 className="pt-3 mr-5 text-[15px] md:text-[18px] lg:text-[18px]">

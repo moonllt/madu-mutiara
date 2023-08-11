@@ -197,12 +197,17 @@ export const navItems = [
     },
     {
       id: 20,
-      title: "Kosmetik",
+      title: "Kosmetik & Kecantikan",
       subTitle: "",
     },
     {
       id: 21,
       title: "Madu Kelengkeng",
+      subTitle: "",
+    },
+    {
+      id: 22,
+      title: "Sabun & Shampo",
       subTitle: "",
     },
   ];

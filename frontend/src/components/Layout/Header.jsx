@@ -215,7 +215,7 @@ const Header = ({ activeHeading }) => {
               onClick={() => setOpenCart(true)}
             >
               <AiOutlineShoppingCart size={30} />
-              <span class="absolute right-0 top-0 rounded-full bg-[#000000] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+              <span class="absolute right-0 top-0 rounded-full bg-[#CF9443] w-4 h-4 top right p-0 m-0 text-black font-mono text-[12px]  leading-tight text-center">
                 {cart && cart.length}
               </span>
             </div>
@@ -233,7 +233,7 @@ const Header = ({ activeHeading }) => {
             className={`fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0`}
           >
             <div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-10 overflow-y-scroll">
-              <div className="w-full justify-between flex pr-3">
+              <div className="w-full justify-between flex pr-2">
                 <div>
                   <div
                     className="relative mr-[15px]"
@@ -245,6 +245,11 @@ const Header = ({ activeHeading }) => {
                     </span>
                   </div>
                 </div>
+                {/* {isAuthenticated && (
+            <Link to="/profile">
+              <CgProfile size={30} color="black" title="Profile" className="mt-5 ml-0 mr-80" />
+            </Link>
+          )} */}
                 <RxCross1
                   size={30}
                   className="ml-4 mt-5"
@@ -283,6 +288,46 @@ const Header = ({ activeHeading }) => {
                 )}
               </div>
 
+              <div
+            onClick={() => setDropDown(!dropDown)}
+            className="mt-2 mb-2 z-10"
+          >
+            <div className="relative">
+              <button
+                className={`h-[40px] w-[120px] flex justify-between items-center pl-2 bg-transparent text-[#00000] hover:bg-gray-200 font-sans text-md font-[500] select-none rounded-t-md ${
+                  dropDown ? "border-b-2 border-black-500" : ""
+                }`}
+              >
+                Kategori
+                <IoIosArrowDown
+                  size={20}
+                  className={`ml-1 transition-transform ${
+                    dropDown ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              {dropDown && (
+                <div className="absolute left-0 w-[120px] mt-2 bg-white shadow-md rounded-b-md overflow-y-auto max-h-[300px]">
+                  <ul className="py-2">
+                    {categoriesData.map((category) => (
+                      <li
+                        key={category.id}
+                        className="px-1 py-2 hover:bg-gray-100"
+                      >
+                        <a
+                          href={`/products?category=${category.title}`}
+                          className="text-gray-800 "
+                        >
+                          {category.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
               <Navbar active={activeHeading} />
               
               <br />
@@ -315,6 +360,7 @@ const Header = ({ activeHeading }) => {
                   </>
                 )}
               </div>
+              
             </div>
           </div>
         )}

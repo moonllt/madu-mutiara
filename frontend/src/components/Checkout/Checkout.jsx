@@ -573,9 +573,11 @@ const CartData = ({
       <br />
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Kode Promo:</h3>
-        <h5 className="text-[18px] font-[600]">
-          - {discountPercentenge ? "Rp " + discountPercentenge.toString() : null}
-        </h5>
+      <h5 className="text-[18px] font-[600]">
+  - {discountPercentenge ? " " + new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(discountPercentenge) : null}
+</h5>
+
+
       </div>
       {/* <h5 className="text-[18px] font-[600] text-end pt-3">Rp </h5> */}
       <h5 className="text-[18px] font-[600] text-end pt-3">{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(totalPrice)}</h5>

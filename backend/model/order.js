@@ -24,6 +24,18 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    shipping:{
+        type: Number,
+        required: true,
+    },
+    discountPrice:{
+        type: Number,
+        required: true,
+    },
+    subTotalPrice:{
+        type: Number,
+        required: true,
+    },
     status:{
         type: String,
         default: "Processing",

@@ -199,7 +199,7 @@ const AllCoupons = () => {
                   </div>
                   <br />
                   <div>
-                    <label className="pb-2">Min Jumlah Potongan Harga</label>
+                    <label className="pb-2">Max Jumlah Potongan Harga</label>
                     <input
                       type="number"
                       name="value"

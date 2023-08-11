@@ -54,6 +54,9 @@ const handlePaymentSuccess = async (result) => {
     shippingAddress: orderData?.shippingAddress,
     user: user && user,
     totalPrice: orderData?.totalPrice,
+    shipping: orderData?.shipping,
+    discountPrice: orderData?.discountPrice,
+    subTotalPrice: orderData?.subTotalPrice,
     paymentInfo: {
       status: "success",
       paymentMethod: "midtrans",

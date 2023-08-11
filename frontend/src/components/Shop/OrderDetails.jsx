@@ -85,12 +85,12 @@ const OrderDetails = () => {
       
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center">
-          <BsFillBagFill size={30} color="crimson" />
+          <BsFillBagFill size={30} color="#806714" />
           <h1 className="pl-2 text-[25px]">Rincian Pesanan</h1>
         </div>
         <Link to="/dashboard-orders">
           <div
-            className={`${styles.button} !bg-[#fce1e6] !rounded-[4px] text-[#e94560] font-[600] !h-[45px] text-[18px]`}
+            className={`${styles.button} !bg-[#f3e8d7] !rounded-[4px] text-[#806714] font-[600] !h-[45px] text-[18px]`}
           >
             Daftar Pesanan
           </div>
@@ -117,13 +117,13 @@ const OrderDetails = () => {
         data?.cart.map((item, index) => (
           <div className="w-full flex items-start mb-5">
             <div className="frame" style={{ width: '100px', height: '100px', border: '2px solid #fffff', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-  <img
-    src={`${backend_url}/${item.images[0]}`}
-    alt=""
-    className="image"
-    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-  />
-</div>
+              <img
+                src={`${backend_url}/${item.images[0]}`}
+                alt=""
+                className="image"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
 
             <div className="w-full">
               <h5 className="pl-3 pt-3 text-[16px]">{item.name}</h5>
@@ -132,32 +132,73 @@ const OrderDetails = () => {
                  x {item.qty}
               </h5>
             </div>
+            
           </div>
         ))}
+      
+      <div className="pl-3 text-[#00000084] border-t ">
+         <h5>
+    Sub Total:{" "}
+    <span style={{ color: "black", fontSize: "15px" }}>
+      {data?.subTotalPrice
+        ? new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          }).format(data.subTotalPrice)
+        : "-"}
+    </span>
+  </h5>
+        <h5>
+  Pengiriman:{" "}
+  <span style={{ color: "black" }}>
+    {data?.shipping
+      ? new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+        }).format(data.shipping)
+      : "-"}
+  </span>
+        </h5>
+        
+        <h5>
+  Kode Promo: -{" "}
+  <span style={{ color: "black" }}>
+    {data?.discountPrice
+      ? new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+        }).format(data.discountPrice)
+      : "-"}
+  </span>
+</h5>
+
+            </div>
 
       <div className="border-t w-full text-right">
+        
         <h5 className="pt-3 text-[18px]">
           Total: <strong>{data?.totalPrice && new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(data.totalPrice)}</strong>
 
         </h5>
+        
       </div>
       <br />
       
       <div className="w-full flex items-center">
   <div className="w-full md:w-[100%] bg-[#F8ECDE] p-4 rounded-xl">
-    <h4 className="pt-3 text-[20px] font-[600]">Alamat Pengiriman:</h4>
-    <h4 className="pt-2 text-[20px]">
+    <h4 className="pt-2 text-[18px] font-[600]">Alamat Pengiriman:</h4>
+    <h4 className="pt-1 text-[16px]">
       {data?.shippingAddress.address1}
     </h4>
-    <h4 className="text-[20px]">Kode Pos: {data?.shippingAddress.zipCode}</h4>
-    <h4 className="text-[20px]">Penerima: {data?.shippingAddress.penerima}</h4>
-    <h4 className="text-[20px]">Ponsel Aktif: {data?.shippingAddress.ponselAktif}</h4>
+    <h4 className="text-[16px]">Kode Pos: {data?.shippingAddress.zipCode}</h4>
+    <h4 className="text-[16px]">Penerima: {data?.shippingAddress.penerima}</h4>
+    <h4 className="text-[16px]">Ponsel Aktif: {data?.shippingAddress.ponselAktif}</h4>
 
-    <h4 className="pt-3 text-[20px] font-[600]">
+    <h4 className="pt-3 text-[18px] font-[600]">
       Status Pembayaran:{" "}
       {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
     </h4>
-    <h4 className="pt-1 text-[20px] font-[600]">No resi: {nomorResi}</h4>
+    <h4 className="pt-1 text-[18px] font-[600]">No resi: {nomorResi}</h4>
   </div>
 </div>
 
@@ -166,7 +207,7 @@ const OrderDetails = () => {
       <div className="left-section rounded-xl" style={{ flex: 1, backgroundColor: '#D2E4CB' }}>
         {/* Konten bagian kiri */}
           <div className="ml-2">
-            <h4 className="pt-3 text-[20px] font-[600]">Status Pesanan:</h4>
+            <h4 className="pt-3 text-[18px] font-[600]">Status Pesanan:</h4>
           {data?.status !== "Processing refund" && data?.status !== "Refund Success" && ( <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
@@ -223,7 +264,7 @@ const OrderDetails = () => {
       }
 
       <div
-        className={`${styles.button} mt-5 !bg-[#000000] !rounded-[10px] text-[#ffffff] font-[600] !h-[45px] text-[18px]`}
+        className={`${styles.button} mt-5 !bg-[#000000] !rounded-[10px] text-[#ffffff] font-[500] !h-[45px] text-[18px]`}
         onClick={data?.status !== "Processing refund" ? orderUpdateHandler : refundOrderUpdateHandler}
       >
         Update Status
@@ -233,7 +274,7 @@ const OrderDetails = () => {
       <div className="right-section rounded-xl" style={{ flex: 1, backgroundColor: '#CDB1D6' }}>
         {/* Konten bagian kanan */}
           <div className="mt-2 ml-2">
-        <h4 className="pt-2 mb-1 text-[20px] font-[600]">Input Nomor Resi:</h4>
+        <h4 className="pt-2 mb-1 text-[18px] font-[600]">Input Nomor Resi:</h4>
         <form className="resi-form" onSubmit={handleResiSubmit}>
           <input
             type="text"

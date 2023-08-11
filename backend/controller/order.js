@@ -12,7 +12,7 @@ router.post(
   "/create-order",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
+      const { cart, shippingAddress, user, totalPrice, shipping, discountPrice, subTotalPrice, paymentInfo } = req.body;
 
       //   group cart items by shopId
       const shopItemsMap = new Map();
@@ -34,6 +34,9 @@ router.post(
           shippingAddress,
           user,
           totalPrice,
+          shipping,
+          discountPrice,
+          subTotalPrice,
           paymentInfo,
         });
         orders.push(order);

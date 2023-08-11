@@ -342,11 +342,11 @@ const SellerInbox = ({
       {/* message header */}
       <div className="w-full flex p-3 items-center justify-between bg-slate-200">
         <div className="flex">
-          <img
+          {/* <img
             src={`${userData?.avatar?.url}`}
             alt=""
             className="w-[60px] h-[60px] rounded-full"
-          />
+          /> */}
           <div className="pl-3">
             <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
             <h1>{activeStatus ? "Active Now" : ""}</h1>
@@ -369,13 +369,13 @@ const SellerInbox = ({
               }`}
               ref={scrollRef}
             >
-              {item.sender !== sellerId && (
+              {/* {item.sender !== sellerId && (
                 <img
                   src={`${userData?.avatar?.url}`}
                   className="w-[40px] h-[40px] rounded-full mr-3"
                   alt=""
                 />
-              )}
+              )} */}
               {item.images && (
                 <img
                   src={`${item.images?.url}`}

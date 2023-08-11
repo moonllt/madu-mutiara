@@ -493,7 +493,7 @@ const ChangePassword = () => {
   return (
     <div className="w-full px-5">
       <h1 className="block text-[25px] text-center font-[600] text-[#000000ba] pb-2">
-        Change Password
+        Ubah Password
       </h1>
       <div className="w-full">
         <form
