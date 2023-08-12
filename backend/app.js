@@ -8,7 +8,7 @@ const path = require("path");
 
 
 app.use(cors({
-  origin: 'https://madumutiara.vercel.app/',
+  origin: ['https://madumutiara.vercel.app/',],
   credentials: true
 }));
 
