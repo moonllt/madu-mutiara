@@ -408,7 +408,7 @@ const Header = ({ activeHeading }) => {
             <Link key={i._id} to={`/product/${i._id}`}>
               <div className="flex items-center p-3 border-b border-gray-200 hover:bg-gray-100">
                 <img
-                  src={`${backend_url}${i.images[0]}`}
+                  src={`${i.images[0]?.url}`}
                   alt=""
                   className="w-12 h-12 mr-3 object-cover rounded-md"
                 />

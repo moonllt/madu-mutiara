@@ -1088,7 +1088,7 @@ import { AiFillHeart, AiOutlineHeart, AiOutlineMessage, AiOutlineShoppingCart } 
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getAllProductsShop } from "../../redux/actions/product";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import styles from "../../styles/styles";
 import { addToWishlist, removeFromWishlist } from "../../redux/actions/wishlist";
 import { addTocart } from "../../redux/actions/cart";
@@ -1208,7 +1208,7 @@ const ProductDetails = ({ data }) => {
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%] mr-2 ml-9">
                 <img
-                  src={`${backend_url}${data && data.images[select]}`}
+                  src={`${data && data.images[select]?.url}`}
                   alt=""
                   className="w-full h-auto"
                 />
@@ -1218,11 +1218,11 @@ const ProductDetails = ({ data }) => {
                       <div
                         key={index}
                         className={`${
-                          select === index ? "border" : "null"
+                          select === 0 ? "border" : "null"
                         } cursor-pointer`}
                       >
                         <img
-                          src={`${backend_url}${i}`}
+                          src={`${i?.url}`}
                           alt=""
                           className="h-20 w-20 object-cover mr-2"
                           onClick={() => setSelect(index)}

@@ -4,4 +4,4 @@
 
 export const server = "https://backend-madu.vercel.app/api/v2";
 
-export const backend_url = "https://backend-madu.vercel.app/api/v2";
+// export const backend_url = "https://backend-madu.vercel.app/api/v2";

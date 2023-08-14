@@ -7,7 +7,6 @@ import {
 } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
 import { Link } from "react-router-dom";
-import { backend_url } from "../../../server";
 import styles from "../../../styles/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -25,7 +24,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   const [click, setClick] = useState(false);
   //   const [select, setSelect] = useState(false);
 
-  const handleMessageSubmit = () => {};
+  const handleMessageSubmit = () => { };
 
   const decrementCount = () => {
     if (count > 1) {
@@ -84,13 +83,13 @@ const ProductDetailsCard = ({ setOpen, data }) => {
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={`${backend_url}${data.images && data.images[0]}`}
+                  src={`${data.images && data.images[0]?.url}`}
                   alt=""
                 />
                 <div className="flex">
                   <Link to={`/shop/preview/${data.shop._id}`} className="flex">
                     <img
-                      src={`${backend_url}${data?.shop?.avatar}`}
+                      src={`{data?.shop?.avatar}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
@@ -107,10 +106,10 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   onClick={handleMessageSubmit}
                 >
                   <span className="text-[#fff] flex items-center">
-                   Kirim pesan<AiOutlineMessage className="ml-1" />
+                    Kirim pesan<AiOutlineMessage className="ml-1" />
                   </span>
                 </div>
-            
+
               </div>
 
               <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">
@@ -120,7 +119,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 <p>{data.description}</p>
 
                 <div className="flex pt-3">
-                  <h3 className={`${styles.price}`}>Rp 
+                  <h3 className={`${styles.price}`}>Rp
                     {data.originalPrice}
                   </h3>
                 </div>

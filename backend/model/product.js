@@ -44,8 +44,15 @@ const productSchema = new mongoose.Schema({
   // options: [productOptionSchema], // Menyimpan pilihan berat, harga, dan stok dalam array
   images: [
     {
-      type: String,
-    },
+      public_id: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+    }
   ],
   reviews: [
     {

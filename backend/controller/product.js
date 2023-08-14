@@ -8,38 +8,7 @@ const Shop = require("../model/shop");
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
 const fs = require("fs");
-
-// create product
-router.post(
-  "/create-product",
-  upload.array("images"),
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      const shopId = req.body.shopId;
-      const shop = await Shop.findById(shopId);
-      if (!shop) {
-        return next(new ErrorHandler("Shop Id is invalid!", 400));
-      } else {
-        const files = req.files;
-        const imageUrls = files.map((file) => `${file.filename}`);
-
-        const productData = req.body;
-        productData.images = imageUrls;
-        productData.shop = shop;
-
-        const product = await Product.create(productData);
-
-        res.status(201).json({
-          success: true,
-          product,
-        });
-      }
-    } catch (error) {
-      return next(new ErrorHandler(error, 400));
-    }
-  })
-);
-
+const cloudinary = require('cloudinary').v2;
 
 // // create product
 // router.post(
@@ -55,21 +24,9 @@ router.post(
 //         const files = req.files;
 //         const imageUrls = files.map((file) => `${file.filename}`);
 
-//         const { name, description, category, tags, price, size, stock} = req.body;
-
-//         const productData = {
-//           name,
-//           description,
-//           category,
-//           tags,
-//           price,
-//           size,
-//           stock,
-//           // options: JSON.parse(options), // Mengonversi pilihan berat dan harga menjadi objek JSON
-//           images: imageUrls,
-//           shopId,
-//           shop,
-//         };
+//         const productData = req.body;
+//         productData.images = imageUrls;
+//         productData.shop = shop;
 
 //         const product = await Product.create(productData);
 
@@ -83,6 +40,51 @@ router.post(
 //     }
 //   })
 // );
+
+
+router.post(
+  "/create-product",
+  upload.array("images"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const shopId = req.body.shopId;
+      const shop = await Shop.findById(shopId);
+      if (!shop) {
+        return next(new ErrorHandler("Shop Id is invalid!", 400));
+      } else {
+        const files = req.files;
+
+        const imageUrls = [];
+
+        for (const file of files) {
+  const result = await cloudinary.uploader.upload(file.path, {
+    public_id: `product_image_${Date.now()}`, // Menggunakan timestamp sebagai public_id
+  });
+  imageUrls.push({
+    public_id: result.public_id,
+    url: result.secure_url,
+  });
+}
+
+
+        const productData = req.body;
+        productData.images = imageUrls;
+        productData.shop = shop;
+
+        const product = await Product.create(productData);
+
+        res.status(201).json({
+          success: true,
+          product,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
 
 
 // get all products of a shop
@@ -102,7 +104,43 @@ router.get(
   })
 );
 
-// delete product of a shop
+// // delete product of a shop
+// router.delete(
+//   "/delete-shop-product/:id",
+//   isSeller,
+//   catchAsyncErrors(async (req, res, next) => {
+//     try {
+//       const productId = req.params.id;
+
+//       const productData = await Product.findById(productId);
+
+//       productData.images.forEach((imageUrl) => {
+//         const filename = imageUrl;
+//         const filePath = `uploads/${filename}`;
+
+//         fs.unlink(filePath, (err) => {
+//           if (err) {
+//             console.log(err);
+//           }
+//         });
+//       });
+
+//       const product = await Product.findByIdAndDelete(productId);
+
+//       if (!product) {
+//         return next(new ErrorHandler("Product not found with this id!", 500));
+//       }
+
+//       res.status(201).json({
+//         success: true,
+//         message: "Product Deleted successfully!",
+//       });
+//     } catch (error) {
+//       return next(new ErrorHandler(error, 400));
+//     }
+//   })
+// );
+
 router.delete(
   "/delete-shop-product/:id",
   isSeller,
@@ -112,20 +150,18 @@ router.delete(
 
       const productData = await Product.findById(productId);
 
-      productData.images.forEach((imageUrl) => {
-        const filename = imageUrl;
-        const filePath = `uploads/${filename}`;
-
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+      // Menghapus gambar dari Cloudinary
+      productData.images.forEach(async (image) => {
+        try {
+          await cloudinary.uploader.destroy(image.public_id);
+        } catch (error) {
+          console.error(error);
+        }
       });
 
-      const product = await Product.findByIdAndDelete(productId);
+      const deletedProduct = await Product.findByIdAndDelete(productId);
 
-      if (!product) {
+      if (!deletedProduct) {
         return next(new ErrorHandler("Product not found with this id!", 500));
       }
 

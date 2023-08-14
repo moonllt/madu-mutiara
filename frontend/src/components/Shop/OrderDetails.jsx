@@ -4,7 +4,7 @@ import { BsFillBagFill } from "react-icons/bs";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfShop } from "../../redux/actions/order";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -118,7 +118,7 @@ const OrderDetails = () => {
           <div className="w-full flex items-start mb-5">
             <div className="frame" style={{ width: '100px', height: '100px', border: '2px solid #fffff', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img
-                src={`${backend_url}/${item.images[0]}`}
+                src={`${item.images[0]?.url}`}
                 alt=""
                 className="image"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
