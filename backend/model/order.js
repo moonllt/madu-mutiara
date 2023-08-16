@@ -30,7 +30,7 @@ const orderSchema = new mongoose.Schema({
     },
     discountPrice:{
         type: Number,
-        required: true,
+        required: false,
     },
     subTotalPrice:{
         type: Number,
