@@ -12,7 +12,7 @@ export const createProduct =
     price,
     size,
     stock,
-    shopId,
+    // shopId,
     images
   ) =>
   async (dispatch) => {
@@ -30,7 +30,7 @@ export const createProduct =
         price,
         size,
         stock,
-        shopId,
+        // shopId,
         images,
       );
       dispatch({
