@@ -87,7 +87,7 @@ router.post(
       seller = await Shop.create({
         name,
         email,
-        avatar,
+        // avatar,
         password,
         zipCode,
         address,
