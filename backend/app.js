@@ -7,11 +7,19 @@ const cors = require("cors");
 const path = require("path");
 
 
+// app.use(cors({
+//   origin: ['https://madumutiara.vercel.app',],
+//   // origin: ['http://localhost:3000',],
+//   credentials: true
+// }));
+
 app.use(cors({
-  origin: ['https://madumutiara.vercel.app',],
-  // origin: ['http://localhost:3000',],
+  origin: ['https://madumutiara.vercel.app'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  headers: 'Content-Type, Authorization',
   credentials: true
 }));
+
 
 app.use(express.json());
 app.use(cookieParser());
