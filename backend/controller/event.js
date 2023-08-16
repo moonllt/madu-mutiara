@@ -1,6 +1,6 @@
 const express = require("express");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const { upload } = require("../multer");
+// const { upload } = require("../multer");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
 const ErrorHandler = require("../utils/ErrorHandler");

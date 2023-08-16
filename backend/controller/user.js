@@ -28,7 +28,7 @@ router.post("/create-user", async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+    const activationUrl = `https://madumutiara.vercel.app/activation/${activationToken}`;
 
     try {
       await sendMail({
@@ -70,7 +70,7 @@ router.post(
       if (!newUser) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password, avatar } = newUser;
+      const { name, email, password} = newUser;
 
       let user = await User.findOne({ email });
 
@@ -80,7 +80,7 @@ router.post(
       user = await User.create({
         name,
         email,
-        avatar,
+        // avatar,
         password,
       });
 
@@ -202,34 +202,34 @@ router.put(
   })
 );
 
-// update user avatar
-router.put(
-  "/update-avatar",
-  isAuthenticated,
-  upload.single("image"),
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      const existsUser = await User.findById(req.user.id);
+// // update user avatar
+// router.put(
+//   "/update-avatar",
+//   isAuthenticated,
+//   upload.single("image"),
+//   catchAsyncErrors(async (req, res, next) => {
+//     try {
+//       const existsUser = await User.findById(req.user.id);
 
-      const existAvatarPath = `uploads/${existsUser.avatar}`;
+//       const existAvatarPath = `uploads/${existsUser.avatar}`;
 
-      fs.unlinkSync(existAvatarPath);
+//       fs.unlinkSync(existAvatarPath);
 
-      const fileUrl = path.join(req.file.filename);
+//       const fileUrl = path.join(req.file.filename);
 
-      const user = await User.findByIdAndUpdate(req.user.id, {
-        avatar: fileUrl,
-      });
+//       const user = await User.findByIdAndUpdate(req.user.id, {
+//         avatar: fileUrl,
+//       });
 
-      res.status(200).json({
-        success: true,
-        user,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
-  })
-);
+//       res.status(200).json({
+//         success: true,
+//         user,
+//       });
+//     } catch (error) {
+//       return next(new ErrorHandler(error.message, 500));
+//     }
+//   })
+// );
 
 // update user addresses
 router.put(
