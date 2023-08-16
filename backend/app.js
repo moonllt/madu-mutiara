@@ -7,11 +7,21 @@ const cors = require("cors");
 const path = require("path");
 
 
+app.options("*", cors());
+
+// app.use(cors({
+//   origin: ['https://madumutiara.vercel.app',],
+//   // origin: ['http://localhost:3000',],
+//   credentials: true
+// }));
+
 app.use(cors({
-  origin: ['https://madumutiara.vercel.app',],
-  // origin: ['http://localhost:3000',],
-  credentials: true
+  origin: ['https://madumutiara.vercel.app'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Atur metode yang diizinkan
+  allowedHeaders: ['Content-Type', 'Authorization'], // Atur header yang diizinkan
 }));
+
 
 app.use(express.json());
 app.use(cookieParser());
