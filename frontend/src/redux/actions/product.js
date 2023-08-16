@@ -2,78 +2,78 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { server } from "../../server";
 
-// create product
-export const createProduct =
-  (
-    name,
-    description,
-    category,
-    tags,
-    price,
-    size,
-    stock,
-    // shopId,
-    images
-  ) =>
-  async (dispatch) => {
-    try {
-      dispatch({
-        type: "productCreateRequest",
-      });
+// // create product
+// export const createProduct =
+//   (
+//     name,
+//     description,
+//     category,
+//     tags,
+//     price,
+//     size,
+//     stock,
+//     // shopId,
+//     images
+//   ) =>
+//   async (dispatch) => {
+//     try {
+//       dispatch({
+//         type: "productCreateRequest",
+//       });
 
-      const { data } = await axios.post(
-        `${server}/product/create-product`,
-        name,
-        description,
-        category,
-        tags,
-        price,
-        size,
-        stock,
-        // shopId,
-        images,
-      );
-      dispatch({
-        type: "productCreateSuccess",
-        payload: data.product,
-      });
-    } catch (error) {
-      dispatch({
-        type: "productCreateFail",
-        payload: error.response.data.message,
-      });
-    }
-  };
+//       const { data } = await axios.post(
+//         `${server}/product/create-product`,
+//         name,
+//         description,
+//         category,
+//         tags,
+//         price,
+//         size,
+//         stock,
+//         // shopId,
+//         images,
+//       );
+//       dispatch({
+//         type: "productCreateSuccess",
+//         payload: data.product,
+//       });
+//     } catch (error) {
+//       dispatch({
+//         type: "productCreateFail",
+//         payload: error.response.data.message,
+//       });
+//     }
+//   };
 
-// export const createProduct = (newForm) => async (dispatch) => {
-//   try {
-//     dispatch({
-//       type: "productCreateRequest",
-//     });
+export const createProduct = (newForm) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "productCreateRequest",
+    });
 
-//     const config = { headers: { "Content-Type": "multipart/form-data" } };
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
 
-//     const { data } = await axios.post(
-//       `${server}/product/create-product`,
-//       newForm,
-//       config
-//     );
+    const { data } = await axios.post(
+      `${server}/product/create-product`,
+      newForm,
+      config
+    );
 
-//     dispatch({
-//       type: "productCreateSuccess",
-//       payload: data.product,
-//     });
+    dispatch({
+      type: "productCreateSuccess",
+      payload: data.product,
+    });
 
-//     toast.success("Product successfully created!");
-//     // Redirect to dashboard or do any necessary actions
-//   } catch (error) {
-//     dispatch({
-//       type: "productCreateFail",
-//       payload: error.response.data.message,
-//     });
-//     toast.error(error.response.data.message);
-//   }
-// };
+    toast.success("Product successfully created!");
+    // Redirect to dashboard or do any necessary actions
+  } catch (error) {
+    dispatch({
+      type: "productCreateFail",
+      payload: error.response.data.message,
+    });
+    toast.error(error.response.data.message);
+  }
+};
 
 // // create product
 // export const createProduct =
