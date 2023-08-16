@@ -7,7 +7,6 @@ const Order = require("../model/order");
 const Shop = require("../model/shop");
 const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
-const fs = require("fs");
 const cloudinary = require('cloudinary').v2;
 
 // // create product
