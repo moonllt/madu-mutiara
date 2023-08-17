@@ -87,12 +87,9 @@ const handleUpdate = (id) => {
       renderCell: (params) => {
         return (
           <>
-            
-              <Button onClick={() => handleDelete(params.id)}>
+            <Button onClick={() => handleDelete(params.id)}>
               <AiOutlineDelete size={20} />
             </Button>
-            
-            
           </>
         );
       },

@@ -7,6 +7,7 @@ const Order = require("../model/order");
 const Shop = require("../model/shop");
 // const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
+const fs = require("fs");
 const cloudinary = require("cloudinary");
 
 // // create product
@@ -94,27 +95,29 @@ router.delete(
   isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const productId = req.params.id;
+      const product = await Product.findById(req.params.id);
 
-      const deletedProduct = await Product.findByIdAndDelete(productId);
-
-      if (!deletedProduct) {
+      if (!product) {
         return next(new ErrorHandler("Product is not found with this id", 404));
+      }    
+
+      for (let i = 0; 1 < product.images.length; i++) {
+        const result = await cloudinary.v2.uploader.destroy(
+          product.images[i].public_id
+        );
       }
+    
+      await product.remove();
 
       res.status(201).json({
         success: true,
         message: "Product Deleted successfully!",
       });
     } catch (error) {
-      console.error(error);
       return next(new ErrorHandler(error, 400));
     }
   })
 );
-
-
-
 
 
 // // create product
