@@ -99,14 +99,16 @@ router.delete(
 
       if (!product) {
         return next(new ErrorHandler("Product is not found with this id", 404));
-      }    
+      }
 
-      for (let i = 0; 1 < product.images.length; i++) {
+      // Menghapus gambar dari Cloudinary
+      for (let i = 0; i < product.images.length; i++) {
         const result = await cloudinary.v2.uploader.destroy(
           product.images[i].public_id
         );
       }
-    
+
+      // Menghapus produk dari database
       await product.remove();
 
       res.status(201).json({
@@ -119,6 +121,7 @@ router.delete(
     }
   })
 );
+
 
 
 // // create product
