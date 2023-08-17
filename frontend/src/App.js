@@ -8,7 +8,6 @@ import {
   HomePage,
   ProductsPage,
   BestSellingPage,
-  EventsPage,
   FAQPage,
   CheckoutPage,
   PaymentPage,
@@ -28,8 +27,6 @@ import {
   ShopDashboardPage,
   ShopCreateProduct,
   ShopAllProducts,
-  ShopCreateEvents,
-  ShopAllEvents,
   ShopAllCoupouns,
   ShopPreviewPage,
   ShopAllOrders,
@@ -47,7 +44,6 @@ import {
   AdminDashboardSellers,
   AdminDashboardOrders,
   AdminDashboardProducts,
-  AdminDashboardEvents,
   AdminDashboardWithdraw
 } from "./routes/AdminRoutes";
 import { ToastContainer } from "react-toastify";
@@ -59,7 +55,6 @@ import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
 import { ShopHomePage } from "./ShopRoutes.js";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 import { getAllProducts } from "./redux/actions/product";
-import { getAllEvents } from "./redux/actions/event";
 import axios from "axios";
 import { server } from "./server";
 // import { Elements } from "@stripe/react-stripe-js";
@@ -70,7 +65,7 @@ const App = () => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
-    Store.dispatch(getAllEvents());
+   
   }, []);
 
   return (
@@ -103,7 +98,7 @@ const App = () => {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/product/:id" element={<ProductDetailsPage />} />
         <Route path="/best-selling" element={<BestSellingPage />} />
-        <Route path="/events" element={<EventsPage />} />
+        
         <Route path="/faq" element={<FAQPage />} />
         <Route
           path="/checkout"
@@ -247,22 +242,8 @@ const App = () => {
             </SellerProtectedRoute>
           }
         />
-        <Route
-          path="/dashboard-create-event"
-          element={
-            <SellerProtectedRoute>
-              <ShopCreateEvents />
-            </SellerProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard-events"
-          element={
-            <SellerProtectedRoute>
-              <ShopAllEvents />
-            </SellerProtectedRoute>
-          }
-        />
+      
+        
         <Route
           path="/dashboard-coupouns"
           element={
@@ -328,14 +309,7 @@ const App = () => {
             </ProtectedAdminRoute>
           }
         />
-         <Route
-          path="/admin-events"
-          element={
-            <ProtectedAdminRoute>
-              <AdminDashboardEvents />
-            </ProtectedAdminRoute>
-          }
-        />
+         
          <Route
           path="/admin-withdraw-request"
           element={

@@ -7,7 +7,6 @@ const Order = require("../model/order");
 const Shop = require("../model/shop");
 // const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
-const fs = require("fs");
 const cloudinary = require("cloudinary");
 
 // // create product
@@ -95,21 +94,13 @@ router.delete(
   isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const product = await Product.findById(req.params.id);
+      const productId = req.params.id;
 
-      if (!product) {
+      const deletedProduct = await Product.findByIdAndDelete(productId);
+
+      if (!deletedProduct) {
         return next(new ErrorHandler("Product is not found with this id", 404));
       }
-
-      // Menghapus gambar dari Cloudinary
-      for (let i = 0; i < product.images.length; i++) {
-        const result = await cloudinary.v2.uploader.destroy(
-          product.images[i].public_id
-        );
-      }
-
-      // Menghapus produk dari database
-      await product.remove();
 
       res.status(201).json({
         success: true,
@@ -121,6 +112,8 @@ router.delete(
     }
   })
 );
+
+
 
 
 

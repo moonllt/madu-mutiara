@@ -6,7 +6,7 @@ import styles from "../../styles/styles";
 import ProductCard from "../Route/ProductCard/ProductCard";
 // import { backend_url } from "../../server";
 import Ratings from "../Products/Ratings";
-import { getAllEventsShop } from "../../redux/actions/event";
+
 
 const ShopProfileData = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);
@@ -16,7 +16,7 @@ const ShopProfileData = ({ isOwner }) => {
 
   useEffect(() => {
     dispatch(getAllProductsShop(id));
-    dispatch(getAllEventsShop(id));
+    
   }, [dispatch]);
 
   const [active, setActive] = useState(1);
