@@ -195,31 +195,29 @@ router.get(
 //   })
 // );
 
-// Delete product
+// delete product of a shop
 router.delete(
-  "/delete-product/:id",
+  "/delete-shop-product/:id",
+  isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const productId = req.params.id;
-
-      // Cari produk berdasarkan ID
-      const product = await Product.findById(productId);
+      const product = await Product.findById(req.params.id);
 
       if (!product) {
-        return next(new ErrorHandler("Product not found", 404));
-      }
+        return next(new ErrorHandler("Product is not found with this id", 404));
+      }    
 
-      // Hapus gambar produk dari Cloudinary (jika ada)
-      for (const image of product.images) {
-        await cloudinary.v2.uploader.destroy(image.public_id);
+      for (let i = 0; 1 < product.images.length; i++) {
+        const result = await cloudinary.v2.uploader.destroy(
+          product.images[i].public_id
+        );
       }
-
-      // Hapus produk dari database
+    
       await product.remove();
 
-      res.status(200).json({
+      res.status(201).json({
         success: true,
-        message: "Product deleted successfully",
+        message: "Product Deleted successfully!",
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
