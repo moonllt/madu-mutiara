@@ -89,6 +89,37 @@ router.post(
   })
 );
 
+// delete product of a shop
+router.delete(
+  "/delete-shop-product/:id",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const product = await Product.findById(req.params.id);
+
+      if (!product) {
+        return next(new ErrorHandler("Product is not found with this id", 404));
+      }    
+
+      for (let i = 0; 1 < product.images.length; i++) {
+        const result = await cloudinary.v2.uploader.destroy(
+          product.images[i].public_id
+        );
+      }
+    
+      await product.remove();
+
+      res.status(201).json({
+        success: true,
+        message: "Product Deleted successfully!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+
 // // create product
 // router.post(
 //   "/create-product",
@@ -158,31 +189,42 @@ router.get(
   })
 );
 
-// delete product of a shop
-router.delete(
-  "/delete-shop-product/:id",
-  isSeller,
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      const productId = req.params.id;
+// // delete product of a shop
+// router.delete(
+//   "/delete-shop-product/:id",
+//   isSeller,
+//   catchAsyncErrors(async (req, res, next) => {
+//     try {
+//       const productId = req.params.id;
 
-      const productData = await Product.findById(productId);
+//       const productData = await Product.findById(productId);
 
-      const product = await Product.findByIdAndDelete(productId);
+//       productData.images.forEach((imageUrl) => {
+//         const filename = imageUrl;
+//         const filePath = `uploads/${filename}`;
 
-      if (!product) {
-        return next(new ErrorHandler("Product not found with this id!", 500));
-      }
+//         fs.unlink(filePath, (err) => {
+//           if (err) {
+//             console.log(err);
+//           }
+//         });
+//       });
 
-      res.status(201).json({
-        success: true,
-        message: "Product Deleted successfully!",
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error, 400));
-    }
-  })
-);
+//       const product = await Product.findByIdAndDelete(productId);
+
+//       if (!product) {
+//         return next(new ErrorHandler("Product not found with this id!", 500));
+//       }
+
+//       res.status(201).json({
+//         success: true,
+//         message: "Product Deleted successfully!",
+//       });
+//     } catch (error) {
+//       return next(new ErrorHandler(error, 400));
+//     }
+//   })
+// );
 
 
 // get all products
