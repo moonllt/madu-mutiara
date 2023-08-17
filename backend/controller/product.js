@@ -114,6 +114,7 @@ router.delete(
         message: "Product Deleted successfully!",
       });
     } catch (error) {
+      console.error(error);
       return next(new ErrorHandler(error, 400));
     }
   })
