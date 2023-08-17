@@ -195,39 +195,38 @@ router.get(
 //   })
 // );
 
+// Delete product
 router.delete(
-  "/delete-shop-product/:id",
-  isSeller,
+  "/delete-product/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
       const productId = req.params.id;
 
-      const productData = await Product.findById(productId);
+      // Cari produk berdasarkan ID
+      const product = await Product.findById(productId);
 
-      // Menghapus gambar dari Cloudinary
-      productData.images.forEach(async (image) => {
-        try {
-          await cloudinary.uploader.destroy(image.public_id);
-        } catch (error) {
-          console.error(error);
-        }
-      });
-
-      const deletedProduct = await Product.findByIdAndDelete(productId);
-
-      if (!deletedProduct) {
-        return next(new ErrorHandler("Product not found with this id!", 500));
+      if (!product) {
+        return next(new ErrorHandler("Product not found", 404));
       }
 
-      res.status(201).json({
+      // Hapus gambar produk dari Cloudinary (jika ada)
+      for (const image of product.images) {
+        await cloudinary.v2.uploader.destroy(image.public_id);
+      }
+
+      // Hapus produk dari database
+      await product.remove();
+
+      res.status(200).json({
         success: true,
-        message: "Product Deleted successfully!",
+        message: "Product deleted successfully",
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
     }
   })
 );
+
 
 // get all products
 router.get(
