@@ -23,9 +23,12 @@ app.use("/test", (req, res) => {
 });
 
 
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "100mb", extended: true }));
 
 
-app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+
+// app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 // config
 if (process.env.NODE_ENV !== "PRODUCTION") {

@@ -8,7 +8,7 @@ const Shop = require("../model/shop");
 // const { upload } = require("../multer");
 const ErrorHandler = require("../utils/ErrorHandler");
 const fs = require("fs");
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require("cloudinary");
 
 // // create product
 // router.post(
@@ -41,10 +41,9 @@ const cloudinary = require('cloudinary').v2;
 //   })
 // );
 
-
+// create product
 router.post(
   "/create-product",
-  upload.array("images"),
   catchAsyncErrors(async (req, res, next) => {
     try {
       const shopId = req.body.shopId;
@@ -52,23 +51,29 @@ router.post(
       if (!shop) {
         return next(new ErrorHandler("Shop Id is invalid!", 400));
       } else {
-        const files = req.files;
+        let images = [];
 
-        const imageUrls = [];
-
-        for (const file of files) {
-  const result = await cloudinary.uploader.upload(file.path, {
-    public_id: `product_image_${Date.now()}`, // Menggunakan timestamp sebagai public_id
-  });
-  imageUrls.push({
-    public_id: result.public_id,
-    url: result.secure_url,
-  });
-}
-
-
+        if (typeof req.body.images === "string") {
+          images.push(req.body.images);
+        } else {
+          images = req.body.images;
+        }
+      
+        const imagesLinks = [];
+      
+        for (let i = 0; i < images.length; i++) {
+          const result = await cloudinary.v2.uploader.upload(images[i], {
+            folder: "products",
+          });
+      
+          imagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        }
+      
         const productData = req.body;
-        productData.images = imageUrls;
+        productData.images = imagesLinks;
         productData.shop = shop;
 
         const product = await Product.create(productData);
@@ -79,11 +84,60 @@ router.post(
         });
       }
     } catch (error) {
-      console.error(error);
       return next(new ErrorHandler(error, 400));
     }
   })
 );
+
+// // create product
+// router.post(
+//   "/create-product",
+//   catchAsyncErrors(async (req, res, next) => {
+//     try {
+//       const shopId = req.body.shopId;
+//       const shop = await Shop.findById(shopId);
+//       if (!shop) {
+//         return next(new ErrorHandler("Shop Id is invalid!", 400));
+//       } else {
+//         let images = [];
+
+//         if (typeof req.body.images === "string") {
+//           images.push(req.body.images);
+//         } else {
+//           images = req.body.images;
+//         }
+
+//         const imageUrls = [];
+
+//         for (const imageDataUrl of images) {
+//           const result = await cloudinary.v2.uploader.upload(imageDataUrl, {
+//             folder: "products",
+//           });
+
+//           imageUrls.push({
+//             public_id: result.public_id,
+//             url: result.secure_url,
+//           });
+//         }
+
+//         const productData = req.body;
+//         productData.images = imageUrls;
+//         productData.shop = shop;
+
+//         const product = await Product.create(productData);
+
+//         res.status(201).json({
+//           success: true,
+//           product,
+//         });
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       return next(new ErrorHandler(error, 400));
+//     }
+//   })
+// );
+
 
 
 
