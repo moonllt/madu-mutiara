@@ -39,45 +39,45 @@ const CreateProduct = () => {
     }
   }, [dispatch, error, success]);
 
-  const handleImageChange = (e) => {
-    e.preventDefault();
+  // const handleImageChange = (e) => {
+  //   e.preventDefault();
 
-    let files = Array.from(e.target.files);
-    // console.log("Selected Files:", files);
-    setImages((prevImages) => [...prevImages, ...files]);
+  //   let files = Array.from(e.target.files);
+  //   console.log("Selected Files:", files);
+  //   setImages((prevImages) => [...prevImages, ...files]);
+  // };
+
+  const handleImageChange = (e) => {
+  e.preventDefault();
+
+  const files = Array.from(e.target.files);
+  readAndConvertImageToDataUrl(files);
+};
+
+
+  const readAndConvertImageToDataUrl = (files) => {
+  const imageDataUrls = [];
+
+  const loadImage = (file) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        imageDataUrls.push(reader.result);
+
+        if (imageDataUrls.length === files.length) {
+          setImages((prevImages) => [...prevImages, ...imageDataUrls]);
+        }
+      }
+    };
+
+    reader.readAsDataURL(file);
   };
 
-//   const handleImageChange = (e) => {
-//   e.preventDefault();
-
-//   const files = Array.from(e.target.files);
-//   readAndConvertImageToDataUrl(files);
-// };
-
-
-//   const readAndConvertImageToDataUrl = (files) => {
-//   const imageDataUrls = [];
-
-//   const loadImage = (file) => {
-//     const reader = new FileReader();
-
-//     reader.onload = () => {
-//       if (reader.readyState === 2) {
-//         imageDataUrls.push(reader.result);
-
-//         if (imageDataUrls.length === files.length) {
-//           setImages((prevImages) => [...prevImages, ...imageDataUrls]);
-//         }
-//       }
-//     };
-
-//     reader.readAsDataURL(file);
-//   };
-
-//   files.forEach((file) => {
-//     loadImage(file);
-//   });
-// };
+  files.forEach((file) => {
+    loadImage(file);
+  });
+};
 
 
   console.log(images);
@@ -98,20 +98,20 @@ const CreateProduct = () => {
     newForm.append("size", size);
     newForm.append("stock", stock);
     newForm.append("shopId", seller._id);
-    dispatch(createProduct(newForm));
-    // dispatch(
-    //   createProduct({
-    //     name,
-    //     description,
-    //     category,
-    //     tags,
-    //     price,
-    //     size,
-    //     stock,
-    //     shopId: seller._id,
-    //     images,
-    //   })
-    // );
+    // dispatch(createProduct(newForm));
+    dispatch(
+      createProduct({
+        name,
+        description,
+        category,
+        tags,
+        price,
+        size,
+        stock,
+        shopId: seller._id,
+        images,
+      })
+    );
   };
 
   return (
@@ -241,10 +241,10 @@ const CreateProduct = () => {
               <AiOutlinePlusCircle size={30} className="mt-3" color="#555" />
             </label>
             {images &&
-              images.map((i) => (
+              images.map((dataUrl, index) => (
                 <img
-                  src={URL.createObjectURL(i)}
-                  key={i}
+                  src={dataUrl}
+                  key={index}
                   alt=""
                   className="h-[120px] w-[120px] object-cover m-2"
                 />
