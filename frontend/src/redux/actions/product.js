@@ -32,19 +32,9 @@ import { server } from "../../server";
 //   }
 // };
 
-// create product
+
 export const createProduct =
-  (
-    name,
-    description,
-    category,
-    tags,
-    originalPrice,
-    discountPrice,
-    stock,
-    shopId,
-    images
-  ) =>
+  (newForm) =>
   async (dispatch) => {
     try {
       dispatch({
@@ -53,16 +43,9 @@ export const createProduct =
 
       const { data } = await axios.post(
         `${server}/product/create-product`,
-        name,
-        description,
-        category,
-        tags,
-        originalPrice,
-        discountPrice,
-        stock,
-        shopId,
-        images,
+        newForm // Kirim data FormData kesini
       );
+      
       dispatch({
         type: "productCreateSuccess",
         payload: data.product,
@@ -74,6 +57,10 @@ export const createProduct =
       });
     }
   };
+
+
+
+
 
 // // create product
 // export const createProduct =
