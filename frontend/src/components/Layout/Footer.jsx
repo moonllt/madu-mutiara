@@ -11,8 +11,44 @@ import {
   footerProductLinks,
   footerSupportLinks,
 } from "../../static/data";
+import { server } from "../../server";
+import { useDispatch, useSelector } from "react-redux";
+import { linkk, useNavigate } from "react-router-dom";
 
-const Footer = () => {
+import { toast } from "react-toastify";
+import axios from "axios";
+
+
+
+const Footer = ({ data }) => {
+    const navigate = useNavigate();
+
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+
+  const handleMessageSubmit = async () => {
+    if (isAuthenticated) {
+      const groupTitle = data._id + user._id;
+      const userId = user._id;
+      const sellerId = data.shop._id;
+      await axios
+        .post(`${server}/conversation/create-new-conversation`, {
+          groupTitle,
+          userId,
+          sellerId,
+        })
+        .then((res) => {
+          navigate(`/inbox?${res.data.conversation._id}`);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } else {
+      toast.error("Please login to create a conversation");
+    }
+  };
+
+
+  
   return (
     <div className="bg-[#000] text-white">
       <div className="md:flex md:justify-between md:items-center sm:px-12 px-4 bg-[#cbc4ac] py-7">
@@ -98,7 +134,7 @@ const Footer = () => {
               <Link
                 className="text-gray-400 hover:text-teal-400 duration-300
                    text-sm cursor-pointer leading-6"
-                to={link.link}
+                to={handleMessageSubmit}
               >
                 {link.name}
               </Link>
