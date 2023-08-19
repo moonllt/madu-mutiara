@@ -80,7 +80,7 @@ const BestDeals = () => {
                 Mutiara bekerjasama dengan UMJ dalam penelitian pengembangan produk & magang mahasiswa.
               </p>
             </div>
-            <div className="w-full md:w-1/3 p-4 ml-20">
+            <div className="w-full md:w-1/2 p-4 ml-4">
   <Slider dots={true} infinite={true} slidesToShow={1} slidesToScroll={1}>
     {/* Ini adalah duplikasi elemen terakhir sebagai elemen pertama */}
     <div>

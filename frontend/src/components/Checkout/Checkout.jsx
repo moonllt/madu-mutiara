@@ -255,7 +255,7 @@ const Checkout = () => {
             ponselAktif={ponselAktif}
             setPonselAktif={setPonselAktif}
           />
-          {shippingOptions && shippingOptions.length > 0 && (
+          {/* {shippingOptions && shippingOptions.length > 0 && (
   <div className="w-[90%] 1000px:w-[90%] bg-white rounded-md p-5 mt-8 mr-80">
     <h4>Pengiriman:</h4>
     <select
@@ -272,7 +272,28 @@ const Checkout = () => {
 </select>
 
   </div>
-)}
+)} */}
+          
+          {/* Versi untuk Layar Responsif */}
+      {shippingOptions && shippingOptions.length > 0 && (
+        <div className="w-full bg-white rounded-md p-5 mt-4 md:ml-4 lg:ml-80">
+          <h4 className="text-lg">Pengiriman:</h4>
+          <select
+            className="border rounded-md h-[50px] md:h-[60px] w-full md:w-[350px] lg:w-[450px] mt-2 md:mt-3 text-base md:text-lg"
+            value={selectedOptionIndex}
+            onChange={(e) => setSelectedOptionIndex(parseInt(e.target.value))}
+          >
+            {shippingOptions.map((option, index) => (
+              <option key={index} value={index}>
+                Ongkos Kirim: {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(option.cost)}
+                | {option.service} | {option.etd} hari
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+          
+
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
           <CartData
